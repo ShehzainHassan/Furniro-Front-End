@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  padding: 30px 50px;
+}
+.login {
+  background-color: #b88e2f;
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column-reverse;
+    gap: 10px;
+  }
+}

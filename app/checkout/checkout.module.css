@@ -1,0 +1,52 @@
+.container {
+  padding: 30px 50px;
+  display: grid;
+  grid-template-columns: 6fr 6fr;
+  gap: 40px;
+}
+.input {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.inputBox {
+  padding: 20px;
+  border-radius: 10px;
+  color: black;
+  background-color: white;
+}
+.productInfo {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px;
+}
+.product {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.price {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: right;
+}
+.finalTotal {
+  color: #b88e2f;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+.productDetails {
+  display: flex;
+  flex-direction: column;
+}
+.btn {
+  padding: 20px;
+  border-radius: 15px;
+  background-color: white;
+  border: 1px solid;
+  color: black;
+  cursor: pointer;
+  font-size: 1.3rem;
+}

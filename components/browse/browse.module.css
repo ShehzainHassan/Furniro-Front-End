@@ -1,0 +1,41 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 30px 50px;
+}
+.rooms {
+  display: flex;
+  justify-content: space-evenly;
+}
+.names {
+  padding: 10px;
+  justify-content: space-around;
+  font-weight: bold;
+}
+.title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+.roomImg {
+  max-width: 380px;
+  height: 480px;
+}
+.mobile {
+  display: none;
+}
+@media (max-width: 768px) {
+  .rooms {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .mobile {
+    display: block;
+    text-align: center;
+    font-weight: bold;
+  }
+  .names {
+    display: none;
+  }
+}

@@ -1,0 +1,38 @@
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 20px;
+}
+
+.mainContent h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.addProductForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.addProductForm input {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.addProductForm button {
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.addProductForm button:hover {
+  background-color: #2980b9;
+}

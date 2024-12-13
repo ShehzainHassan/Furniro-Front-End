@@ -1,0 +1,84 @@
+.container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 400px;
+  height: 500px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  z-index: 1000;
+  display: none;
+  overflow-y: auto;
+}
+
+.show {
+  display: block;
+}
+
+.product {
+  display: flex;
+  gap: 10px;
+}
+.productDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.productQtyPrice {
+  display: flex;
+  gap: 20px;
+}
+.subContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.cartItems {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  padding: 20px;
+}
+.productInfo {
+  display: flex;
+  justify-content: space-between;
+}
+.deleteButton {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.cart {
+  display: flex;
+  justify-content: space-between;
+}
+.close {
+  padding: 10px;
+  border-radius: 10px;
+  background-color: red;
+  cursor: pointer;
+}
+.cartTotal {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 20px;
+  padding-top: 10px;
+  border-top: 1px solid #ddd;
+}
+.finalTotal {
+  color: #b88e3b;
+}
+@media (max-width: 768px) {
+  .container {
+    width: 350px;
+    height: 350px;
+  }
+}
