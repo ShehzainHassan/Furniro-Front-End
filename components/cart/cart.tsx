@@ -46,9 +46,9 @@ export default function ShoppingCart({ isVisible, closeCart }: CartProps) {
     }
   };
 
-  const deleteFromCart = (_id: string) => {
+  const deleteFromCart = async (_id: string) => {
     try {
-      axios.delete(
+      await axios.delete(
         `https://furniro.up.railway.app/removeProduct/${email}/${_id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
