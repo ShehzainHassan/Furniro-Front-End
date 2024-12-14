@@ -7,13 +7,7 @@ export default function Statistics() {
   const [userCount, setUserCount] = useState<number>(0);
   const [productCount, setProductCount] = useState<number>(0);
   const [regularUsers, setRegularUserCount] = useState<number>(0);
-  const [token, setToken] = useState<string | null>(null);
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const _token = localStorage.getItem("JWT");
-      setToken(_token);
-    }
-  }, []);
+
   const loadUserCount = async () => {
     try {
       const response = await axios.get("http://localhost:8000/getAllUsers", {
@@ -41,6 +35,9 @@ export default function Statistics() {
     loadUserCount();
     loadProductCount();
   }, []);
+  if (typeof window == "undefined") return null;
+  const token = localStorage.getItem("JWT");
+
   return (
     <div className={classes.container}>
       <h1 className={classes.title}>Statistics</h1>

@@ -59,7 +59,21 @@ export default function Signup() {
       saveUserToDB();
     }
   };
-
+  const redirectToHome = async () => {
+    const userEmail = Cookies.get("loggedEmail");
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/getUserRole?email=${userEmail}`
+      );
+      if (response.data.includes("ADMIN")) {
+        window.location.href = "/adminHome";
+      } else {
+        window.location.href = "/home";
+      }
+    } catch (err) {
+      console.error("Error redirecting to Home ", err);
+    }
+  };
   const saveUserToDB = async () => {
     try {
       const response = await axios.post("http://localhost:8000/auth/signup", {
@@ -70,7 +84,8 @@ export default function Signup() {
       localStorage.setItem("JWT", response.data.token);
       Cookies.set("loggedEmail", formData.email);
       Cookies.set("loggedIn", "true");
-      window.location.href = "/home";
+      Cookies.set("JWT", response.data.token);
+      redirectToHome();
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError<ApiError>;

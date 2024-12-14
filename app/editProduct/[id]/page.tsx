@@ -11,17 +11,13 @@ export default function EditProductPage() {
   const [isDiscount, setIsDiscount] = useState(false);
   const [isNew, setIsNew] = useState(false);
   const [discountPercentage, setDiscountPercentage] = useState(0);
-  const [token, setToken] = useState<string | null>(null);
   const pathname = usePathname();
 
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const id = pathname.split("/").pop();
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const _token = localStorage.getItem("JWT");
-      setToken(_token);
-    }
+    loadSelectedProduct();
   }, []);
 
   const [formData, setFormData] = useState({
@@ -66,9 +62,8 @@ export default function EditProductPage() {
     }
   };
 
-  useEffect(() => {
-    loadSelectedProduct();
-  }, []);
+  if (typeof window == "undefined") return null;
+  const token = localStorage.getItem("JWT");
 
   if (!selectedProduct) {
     return null;

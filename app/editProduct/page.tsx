@@ -4,16 +4,15 @@ import { useEffect, useState } from "react";
 import Products from "../shop/products/page";
 
 export default function EditProduct() {
-  const [token, setToken] = useState<string | null>(null);
   const [totalProducts, setTotalProducts] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const _token = localStorage.getItem("JWT");
-      setToken(_token);
-    }
+    loadProducts();
   }, []);
+
+  if (typeof window == "undefined") return null;
+  const token = localStorage.getItem("JWT");
 
   const loadProducts = async () => {
     try {
@@ -27,10 +26,6 @@ export default function EditProduct() {
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    loadProducts();
-  }, []);
 
   return (
     <div>
