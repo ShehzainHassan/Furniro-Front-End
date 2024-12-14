@@ -35,7 +35,7 @@ export default function ShoppingCart({ isVisible, closeCart }: CartProps) {
   const loadUserCart = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/getCart?email=${email}`,
+        `https://furniro.up.railway.app/getCart?email=${email}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -48,9 +48,12 @@ export default function ShoppingCart({ isVisible, closeCart }: CartProps) {
 
   const deleteFromCart = (_id: string) => {
     try {
-      axios.delete(`http://localhost:8000/removeProduct/${email}/${_id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      axios.delete(
+        `https://furniro.up.railway.app/removeProduct/${email}/${_id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       loadUserCart();
       window.location.reload();
     } catch (err) {
@@ -62,7 +65,7 @@ export default function ShoppingCart({ isVisible, closeCart }: CartProps) {
     try {
       const productRequests = cartItems.map(async (item) => {
         const productResponse = await axios.get(
-          `http://localhost:8000/product/${item.id}`,
+          `https://furniro.up.railway.app/product/${item.id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }

@@ -63,7 +63,7 @@ export default function Signup() {
     const userEmail = Cookies.get("loggedEmail");
     try {
       const response = await axios.get(
-        `http://localhost:8000/getUserRole?email=${userEmail}`
+        `https://furniro.up.railway.app/getUserRole?email=${userEmail}`
       );
       if (response.data.includes("ADMIN")) {
         window.location.href = "/adminHome";
@@ -76,11 +76,14 @@ export default function Signup() {
   };
   const saveUserToDB = async () => {
     try {
-      const response = await axios.post("http://localhost:8000/auth/signup", {
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-      });
+      const response = await axios.post(
+        "https://furniro.up.railway.app/auth/signup",
+        {
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+        }
+      );
       localStorage.setItem("JWT", response.data.token);
       Cookies.set("loggedEmail", formData.email);
       Cookies.set("loggedIn", "true");

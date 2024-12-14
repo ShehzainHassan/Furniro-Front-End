@@ -17,7 +17,7 @@ export default function Footer() {
     if (!token) return;
     try {
       const response = await axios.get(
-        `http://localhost:8000/auth/userInfo?token=${token}`
+        `https://furniro.up.railway.app/auth/userInfo?token=${token}`
       );
       setUserRole(response.data.role);
     } catch (err) {

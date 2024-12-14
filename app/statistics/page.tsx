@@ -10,9 +10,12 @@ export default function Statistics() {
 
   const loadUserCount = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/getAllUsers", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        "https://furniro.up.railway.app/getAllUsers",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       setUserCount(response.data.length);
       setRegularUserCount(response.data.length - 1);
@@ -22,9 +25,12 @@ export default function Statistics() {
   };
   const loadProductCount = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/getAllProducts", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        "https://furniro.up.railway.app/getAllProducts",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       setProductCount(response.data.length);
     } catch (err) {

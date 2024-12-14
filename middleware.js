@@ -32,7 +32,7 @@ export function middleware(req) {
     (adminOnlyRoutes.some((route) => url.includes(route)) ||
       userRoutes.some((route) => url.includes(route)))
   ) {
-    return NextResponse.redirect("http://localhost:3000/");
+    return NextResponse.redirect("https://furniro.up.railway.app//");
   }
   if (token) {
     if (
@@ -40,7 +40,7 @@ export function middleware(req) {
       !decodedToken?.role.includes("ADMIN")
     ) {
       console.log("USER");
-      return NextResponse.redirect("http://localhost:3000/home");
+      return NextResponse.redirect("https://furniro.up.railway.app/home");
     }
   }
 

@@ -45,7 +45,7 @@ export default function Navbar({ role }: NavbarProps) {
   const getCartItemCount = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/getCart?email=${email}`,
+        `https://furniro.up.railway.app/getCart?email=${email}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

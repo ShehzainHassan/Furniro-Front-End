@@ -36,7 +36,7 @@ export default function ProductDetails() {
     const userEmail = Cookies.get("loggedEmail");
     try {
       await axios.patch(
-        "http://localhost:8000/updateCart",
+        "https://furniro.up.railway.app/updateCart",
         {
           email: userEmail,
           productId: selectedProduct?._id,
@@ -55,9 +55,12 @@ export default function ProductDetails() {
   const loadSelectedProduct = async () => {
     const id = pathname.split("/").pop();
     try {
-      const response = await axios.get(`http://localhost:8000/product/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        `https://furniro.up.railway.app/product/${id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setSelectedProduct(response.data);
     } catch (err) {
       console.error("Error loading product details ", err);

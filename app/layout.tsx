@@ -23,7 +23,7 @@ export default function RootLayout({
     if (token) {
       try {
         const response = await axios.get(
-          `http://localhost:8000/auth/userInfo?token=${token}`
+          `https://furniro.up.railway.app/auth/userInfo?token=${token}`
         );
         setRole(response.data.role);
       } catch (err) {

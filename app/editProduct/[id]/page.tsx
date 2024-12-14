@@ -30,9 +30,12 @@ export default function EditProductPage() {
 
   const loadSelectedProduct = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/product/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        `https://furniro.up.railway.app/product/${id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setSelectedProduct(response.data);
 
       setFormData({
@@ -71,7 +74,7 @@ export default function EditProductPage() {
   const updateProduct = async () => {
     try {
       await axios.put(
-        `http://localhost:8000/updateProduct/${id}`,
+        `https://furniro.up.railway.app/updateProduct/${id}`,
         {
           productName: formData.productName,
           description: formData.description,

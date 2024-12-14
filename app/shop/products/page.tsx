@@ -55,7 +55,7 @@ export default function Products({
 
   const loadProducts = async () => {
     try {
-      const url = "http://localhost:8000/getProducts";
+      const url = "https://furniro.up.railway.app/getProducts";
       const response = await axios.get(url, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -105,7 +105,7 @@ export default function Products({
 
   const deleteProduct = async (id: string) => {
     try {
-      await axios.delete(`http://localhost:8000/deleteProduct/${id}`, {
+      await axios.delete(`https://furniro.up.railway.app/deleteProduct/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("Product Deleted Successfully", {

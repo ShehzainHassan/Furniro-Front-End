@@ -24,7 +24,7 @@ const AddProduct = () => {
     console.log("Form Data = ", formData.image?.name);
     try {
       await axios.post(
-        "http://localhost:8000/createProduct",
+        "https://furniro.up.railway.app/createProduct",
         {
           productName: formData.productName,
           description: formData.description,

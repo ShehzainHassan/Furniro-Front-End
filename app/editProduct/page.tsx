@@ -16,9 +16,12 @@ export default function EditProduct() {
 
   const loadProducts = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/getProducts", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        "https://furniro.up.railway.app/getProducts",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setTotalProducts(response.data.length);
     } catch (err) {
       console.error("Error loading Products", err);
