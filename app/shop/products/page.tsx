@@ -51,8 +51,6 @@ export default function Products({
 
   const token = localStorage.getItem("JWT");
 
-  console.log("TOKEN:", token);
-
   const loadProducts = async () => {
     try {
       const url = "https://furniro.up.railway.app/getProducts";
@@ -85,9 +83,11 @@ export default function Products({
           b.productName.localeCompare(a.productName)
         );
       } else if (sortBy === "Price (Low to High)") {
-        allProducts.sort(
-          (a: Product, b: Product) => a.originalPrice - b.originalPrice
-        );
+        allProducts.sort((a: Product, b: Product) => {
+          const productA = calculateCurrentPrice(a.originalPrice, a.discount);
+          const productB = calculateCurrentPrice(b.originalPrice, b.discount);
+          return productA - productB;
+        });
       } else if (sortBy === "Price (High to Low)") {
         allProducts.sort(
           (a: Product, b: Product) => b.originalPrice - a.originalPrice
