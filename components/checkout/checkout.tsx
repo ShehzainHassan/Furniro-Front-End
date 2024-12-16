@@ -30,7 +30,7 @@ export default function CheckoutPage() {
       },
     });
     setTimeout(() => {
-      window.location.reload();
+      window.location.href = "/home";
     }, 2500);
   };
   return (
