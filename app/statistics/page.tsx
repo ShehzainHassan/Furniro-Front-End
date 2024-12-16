@@ -10,8 +10,8 @@ export default function Statistics() {
     name: string;
     y: number;
   }
-  interface UserCategory {
-    category: "USER" | "ADMIN";
+  interface UserRole {
+    role: "USER" | "ADMIN";
   }
 
   interface ProductCategory {
@@ -35,9 +35,9 @@ export default function Statistics() {
       setUserCategory(response.data.length);
       const categoryCount: { [key: string]: number } = {};
 
-      response.data.forEach((user: UserCategory) => {
-        const category = user.category;
-        categoryCount[category] = (categoryCount[category] || 0) + 1;
+      response.data.forEach((user: UserRole) => {
+        const role = user.role;
+        categoryCount[role] = (categoryCount[role] || 0) + 1;
       });
 
       setUserCategory([
@@ -96,7 +96,7 @@ export default function Statistics() {
 
   const userOptions = {
     chart: {
-      type: "pie",
+      type: "bar",
     },
     series: [
       {
