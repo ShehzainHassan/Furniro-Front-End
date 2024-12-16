@@ -1,4 +1,5 @@
 "use client";
+import Footer from "@/components/footer/footer";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Image from "next/image";
@@ -207,6 +208,7 @@ export default function ProductDetails() {
         category={selectedProduct?.category}
         itemsToLoad={4}
       />
+      <Footer />
     </>
   );
 }
