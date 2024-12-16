@@ -4,7 +4,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { CiHeart } from "react-icons/ci";
 import { IoPersonOutline } from "react-icons/io5";
@@ -102,7 +102,11 @@ export default function Navbar({ role }: NavbarProps) {
         </div>
       </div>
 
-      <ShoppingCart isVisible={isCartVisible} closeCart={close} />
+      {isCartVisible && (
+        <Suspense fallback={<div>Loading cart...</div>}>
+          <ShoppingCart isVisible={isCartVisible} closeCart={close} />
+        </Suspense>
+      )}
     </>
   );
 }
