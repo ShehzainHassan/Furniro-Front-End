@@ -3,7 +3,7 @@ import { Product } from "@/app/shop/products/page";
 import axios from "axios";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import classes from "./page.module.css";
 
@@ -279,6 +279,7 @@ export default function EditProductPage() {
           Save Changes
         </button>
       </form>
+      <ToastContainer />
     </div>
   );
 }

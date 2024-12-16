@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import classes from "./products.module.css";
 
@@ -278,6 +278,7 @@ export default function Products({
           Show More
         </button>
       )}
+      <ToastContainer />
     </div>
   );
 }
