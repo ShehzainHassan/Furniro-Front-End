@@ -100,7 +100,7 @@ export default function Statistics() {
     },
     series: [
       {
-        type: "pie",
+        type: "bar",
         data: userCategory,
       },
     ],
