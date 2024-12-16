@@ -9,6 +9,7 @@ export default function Statistics() {
   interface CategoryData {
     name: string;
     y: number;
+    color: string;
   }
   interface UserRole {
     role: "USER" | "ADMIN";
@@ -41,8 +42,8 @@ export default function Statistics() {
       });
 
       setUserCategory([
-        { name: "USER", y: categoryCount["USER"] || 0 },
-        { name: "ADMIN", y: categoryCount["ADMIN"] || 0 },
+        { name: "USER", y: categoryCount["USER"] || 0, color: "#434348" },
+        { name: "ADMIN", y: categoryCount["ADMIN"] || 0, color: "#676cd0" },
       ]);
     } catch (err) {
       console.error("Error loading users", err);
@@ -66,10 +67,10 @@ export default function Statistics() {
       });
 
       setProductCategory([
-        { name: "Chair", y: categoryCount["Chair"] || 0 },
-        { name: "Sofa", y: categoryCount["Sofa"] || 0 },
-        { name: "Table", y: categoryCount["Table"] || 0 },
-        { name: "Decor", y: categoryCount["Decor"] || 0 },
+        { name: "Chair", y: categoryCount["Chair"] || 0, color: "#7cb6ec" },
+        { name: "Sofa", y: categoryCount["Sofa"] || 0, color: "#cbba3b" },
+        { name: "Table", y: categoryCount["Table"] || 0, color: "#77d464" },
+        { name: "Decor", y: categoryCount["Decor"] || 0, color: "#676cd0" },
       ]);
     } catch (err) {
       console.error("Error loading users", err);
@@ -86,6 +87,9 @@ export default function Statistics() {
     chart: {
       type: "pie",
     },
+    title: {
+      text: "Products Info",
+    },
     series: [
       {
         type: "pie",
@@ -97,6 +101,9 @@ export default function Statistics() {
   const userOptions = {
     chart: {
       type: "bar",
+    },
+    title: {
+      text: "Users Info",
     },
     series: [
       {
