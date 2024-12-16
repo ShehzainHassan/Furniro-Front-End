@@ -70,7 +70,7 @@ const AddProduct = () => {
 
   return (
     <div className={classes.mainContent}>
-      <h1>Manage Products</h1>
+      <h1>Manage Products {">"} Add Product</h1>
       <form onSubmit={handleSubmit}>
         <div className={classes.addProductForm}>
           <label htmlFor="name">Product Name</label>
