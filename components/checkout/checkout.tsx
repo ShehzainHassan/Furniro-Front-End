@@ -107,10 +107,7 @@ export default function CheckoutPage() {
                 <p className={classes.finalTotal}>{total}</p>
               </div>
             </div>
-            <button
-              type="submit"
-              onClick={handleFormSubmit}
-              className={classes.btn}>
+            <button type="submit" className={classes.btn}>
               Place Order
             </button>
           </div>
