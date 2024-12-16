@@ -11,7 +11,11 @@ export const metadata = {
 export default function Dashboard() {
   return (
     <div>
-      <Banner />
+      <Banner
+        subHeading="New Arrival"
+        title="Discover Our New Collection"
+        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis"
+      />
       <Browse />
       <Products heading="Our Products" />
       <Footer />
