@@ -67,3 +67,8 @@
 .dropdown {
   opacity: 1;
 }
+
+.subBtnContainer {
+  display: flex;
+  gap: 10px;
+}
