@@ -2,7 +2,21 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import classes from "./page.module.css";
+import HighchartsReact from "highcharts-react-official";
+import Highcharts from "highcharts";
 
+const options = {
+  series: [
+    {
+      data: [
+        { name: "Chair", y: 25 },
+        { name: "Sofa", y: 20 },
+        { name: "Table", y: 11 },
+        { name: "Decor", y: 5 },
+      ],
+    },
+  ],
+};
 export default function Statistics() {
   const [userCount, setUserCount] = useState<number>(0);
   const [productCount, setProductCount] = useState<number>(0);
@@ -65,6 +79,9 @@ export default function Statistics() {
         <div className={classes.statCard}>
           <p className={classes.statLabel}>Total Products</p>
           <p className={classes.statValue}>{productCount}</p>
+          <HighchartsReact
+            highcharts={Highcharts}
+            options={options}></HighchartsReact>
         </div>
       </div>
     </div>
