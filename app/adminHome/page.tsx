@@ -30,47 +30,33 @@ const AdminDashboard = () => {
     <div className={classes.dashboardContainer}>
       <h1 className={classes.title}>Admin Home Page</h1>
       <div className={classes.buttonsContainer}>
-        <div className={classes.subBtnContainer}>
-          <MdManageHistory />
-          <button className={classes.button} onClick={toggleDropdown}>
-            Manage Products
-          </button>
-        </div>
+        <button className={classes.button} onClick={toggleDropdown}>
+          <MdManageHistory /> Manage Products
+        </button>
         {isDropdownVisible && (
           <div className={classes.dropdown}>
-            <div className={classes.subBtnContainer}>
-              <IoMdAddCircle />
-              <button
-                onClick={handleAddProduct}
-                className={classes.dropdownButton}>
-                Add Product
-              </button>
-            </div>
-            <div className={classes.subBtnContainer}>
-              <FaEdit />
-              <button
-                onClick={handleEditProduct}
-                className={classes.dropdownButton}>
-                Edit Product
-              </button>
-            </div>
+            <button
+              onClick={handleAddProduct}
+              className={classes.dropdownButton}>
+              <IoMdAddCircle /> Add Product
+            </button>
+            <button
+              onClick={handleEditProduct}
+              className={classes.dropdownButton}>
+              <FaEdit /> Edit Product
+            </button>
 
-            <div className={classes.subBtnContainer}>
-              <MdDelete />
-              <button
-                onClick={handleDeleteProduct}
-                className={classes.dropdownButton}>
-                Delete Product
-              </button>
-            </div>
+            <button
+              onClick={handleDeleteProduct}
+              className={classes.dropdownButton}>
+              <MdDelete /> Delete Product
+            </button>
           </div>
         )}
-        <div className={classes.subBtnContainer}>
-          <ImStatsBars />
-          <button onClick={handleViewStatistics} className={classes.button}>
-            View Statistics
-          </button>
-        </div>
+
+        <button onClick={handleViewStatistics} className={classes.button}>
+          <ImStatsBars /> View Statistics
+        </button>
       </div>
     </div>
   );
