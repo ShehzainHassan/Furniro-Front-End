@@ -36,7 +36,7 @@ export default function CheckoutPage() {
   return (
     <div>
       <Header heading="Checkout" />
-      <form>
+      <form onSubmit={handleFormSubmit}>
         <div className={classes.container}>
           <div>
             <h1>Billing Details</h1>
