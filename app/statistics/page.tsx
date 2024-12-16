@@ -20,7 +20,6 @@ export default function Statistics() {
   }
   const [userCount, setUserCount] = useState<number>(0);
   const [productCount, setProductCount] = useState<number>(0);
-  const [regularUsers, setRegularUserCount] = useState<number>(0);
   const [productCategory, setProductCategory] = useState<CategoryData[]>([]);
   const [userCategory, setUserCategory] = useState<CategoryData[]>([]);
   const loadUserCount = async () => {
@@ -32,7 +31,6 @@ export default function Statistics() {
         }
       );
       setUserCount(response.data.length);
-      setRegularUserCount(response.data.length - 1);
       setUserCategory(response.data.length);
       const categoryCount: { [key: string]: number } = {};
 
@@ -115,20 +113,11 @@ export default function Statistics() {
   return (
     <div className={classes.container}>
       <h1 className={classes.title}>Statistics</h1>
-      <div className={classes.statsWrapper}>
+      <div className={classes.statsWrappe}>
         <div className={classes.statCard}>
           <p className={classes.statLabel}>Registered Users</p>
           <p className={classes.statValue}>{userCount}</p>
-          <div className={classes.userBreakDown}>
-            <div className={classes.regularUsers}>
-              <p>{regularUsers}</p>
-              <p>Regular Users</p>
-            </div>
-            <div className={`${classes.regularUsers} ${classes.adminUser}`}>
-              <p>1</p>
-              <p>Admin User</p>
-            </div>
-          </div>
+
           <HighchartsReact
             highcharts={Highcharts}
             options={userOptions}></HighchartsReact>
