@@ -6,7 +6,6 @@ const BACKEND_API = process.env.NEXT_PUBLIC_API_URL;
 export const redirectToHome = async () => {
   const userEmail = Cookies.get("loggedEmail");
   if (!userEmail) {
-    console.error("No loggedEmail cookie found.");
     return;
   }
 

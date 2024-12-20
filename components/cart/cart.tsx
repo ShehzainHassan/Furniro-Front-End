@@ -5,7 +5,8 @@ import Cookies from "js-cookie";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import classes from "./cart.module.css";
-
+import { useRouter } from "next/navigation";
+import CheckoutPage from "../checkout/checkout";
 interface Cart {
   id: string;
   qty: number;
@@ -13,7 +14,7 @@ interface Cart {
 
 interface CartProps {
   isVisible: boolean;
-  cartType: string;
+  modalType: string;
   closeCart: () => void;
 }
 
@@ -21,7 +22,7 @@ const BACKEND_API = process.env.NEXT_PUBLIC_API_URL;
 
 export default function ShoppingCart({
   isVisible,
-  cartType,
+  modalType,
   closeCart,
 }: CartProps) {
   const [products, setProducts] = useState<(Product & { quantity: number })[]>(
@@ -32,7 +33,7 @@ export default function ShoppingCart({
 
   const email = Cookies.get("loggedEmail");
   const token = Cookies.get("JWT");
-
+  const router = useRouter();
   const calculateCurrentPrice = (originalPrice: number, discount: number) => {
     if (discount > 0) {
       return originalPrice - originalPrice * (discount / 100);
@@ -150,18 +151,32 @@ export default function ShoppingCart({
       console.error("Error removing favorite", err);
     }
   };
+  const proceedToCheckout = () => {
+    const productsData = products.map((product) => ({
+      Name: product.productName,
+      Qty: product.quantity,
+      Price: product.originalPrice,
+    }));
+
+    const queryParams = productsData
+      .map((p) => `Name=${p.Name}&Qty=${p.Qty}&Price=${p.Price}`)
+      .join("&");
+    console.log(queryParams);
+    router.push(`/checkout?fromCart=true&${queryParams}`);
+  };
+
   useEffect(() => {
-    if (cartType === "cart") {
+    if (modalType === "cart") {
       loadUserCart();
-    } else if (cartType === "favorites") {
+    } else if (modalType === "favorites") {
       loadUserFavorites();
     }
-  }, [isVisible, cartType]);
+  }, [isVisible, modalType]);
 
   return (
     <div className={`${classes.container} ${isVisible ? classes.show : ""}`}>
       <div className={classes.subContainer}>
-        {cartType === "cart" ? (
+        {modalType === "cart" ? (
           <>
             <div className={classes.cart}>
               <h1>Shopping Cart</h1>
@@ -215,9 +230,18 @@ export default function ShoppingCart({
                   Rs {cartTotal.toFixed(0)}
                 </span>
               </p>
+              {products.length > 0 && (
+                <div>
+                  <button
+                    onClick={proceedToCheckout}
+                    className={classes.checkoutBtn}>
+                    Checkout
+                  </button>
+                </div>
+              )}
             </div>
           </>
-        ) : cartType === "favorites" ? (
+        ) : modalType === "favorites" ? (
           <>
             <div className={classes.cart}>
               <h1>Favorites</h1>

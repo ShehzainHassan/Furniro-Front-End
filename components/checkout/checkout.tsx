@@ -11,7 +11,8 @@ export default function CheckoutPage() {
   const name = searchParams.get("Name");
   const qty = searchParams.get("Qty");
   const price = searchParams.get("Price");
-
+  const fromCart = searchParams.get("fromCart");
+  console.log(fromCart);
   const priceNum = price ? parseFloat(price) : 0;
   const qtyNum = qty ? parseInt(qty) : 0;
   const total = priceNum * qtyNum;
@@ -33,6 +34,7 @@ export default function CheckoutPage() {
       window.location.href = "/home";
     }, 2500);
   };
+
   return (
     <div>
       <Header heading="Checkout" />
@@ -94,18 +96,33 @@ export default function CheckoutPage() {
             <div className={classes.productInfo}>
               <div className={classes.product}>
                 <h1>Product</h1>
-                <p>
-                  {name} x {qty}
-                </p>
-                <p>Subtotal</p>
-                <p>Total</p>
+                {fromCart === "true" ? (
+                  <>
+                    {searchParams.getAll("Name").map((name, index) => (
+                      <p key={index}>
+                        {name} x {searchParams.getAll("Qty")[index]} - Rs{" "}
+                        {searchParams.getAll("Price")[index]}
+                      </p>
+                    ))}
+                  </>
+                ) : (
+                  <>
+                    <p>
+                      {name} x {qty}
+                    </p>
+                    <p>Subtotal</p>
+                    <p>Total</p>
+                  </>
+                )}
               </div>
-              <div className={classes.price}>
-                <h1>Subtotal</h1>
-                <p>{total}</p>
-                <p>{total}</p>
-                <p className={classes.finalTotal}>{total}</p>
-              </div>
+              {!fromCart && (
+                <div className={classes.price}>
+                  <h1>Subtotal</h1>
+                  <p>{total}</p>
+                  <p>{total}</p>
+                  <p className={classes.finalTotal}>{total}</p>
+                </div>
+              )}{" "}
             </div>
             <button type="submit" className={classes.btn}>
               Place Order

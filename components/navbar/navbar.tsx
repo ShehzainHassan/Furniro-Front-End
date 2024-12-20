@@ -130,7 +130,7 @@ export default function Navbar({ role }: NavbarProps) {
         <Suspense fallback={<div>Loading...</div>}>
           <ShoppingCart
             isVisible={isCartVisible}
-            cartType="cart"
+            modalType="cart"
             closeCart={closeCart}
           />
         </Suspense>
@@ -140,7 +140,7 @@ export default function Navbar({ role }: NavbarProps) {
         <Suspense fallback={<div>Loading...</div>}>
           <ShoppingCart
             isVisible={isFavoriteVisible}
-            cartType="favorites"
+            modalType="favorites"
             closeCart={closeCart}
           />
         </Suspense>

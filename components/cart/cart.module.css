@@ -71,7 +71,8 @@
 }
 .cartTotal {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 20px;
   font-size: 1.2rem;
   font-weight: bold;
   margin-top: 20px;
@@ -88,6 +89,13 @@
   align-items: center;
   background-color: red;
   max-block-size: fit-content;
+}
+.checkoutBtn {
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 @media (max-width: 768px) {
   .container {
