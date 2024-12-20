@@ -12,6 +12,8 @@ interface ApiError {
   status: string;
   message: string;
 }
+const BACKEND_API = process.env.NEXT_PUBLIC_API_URL;
+
 export default function Signup() {
   const [formData, setFormData] = useState({
     name: "",
@@ -63,7 +65,7 @@ export default function Signup() {
     const userEmail = Cookies.get("loggedEmail");
     try {
       const response = await axios.get(
-        `https://furniro.up.railway.app/getUserRole?email=${userEmail}`
+        `${BACKEND_API}/getUserRole?email=${userEmail}`
       );
       if (response.data.includes("ADMIN")) {
         window.location.href = "/adminHome";
@@ -76,14 +78,11 @@ export default function Signup() {
   };
   const saveUserToDB = async () => {
     try {
-      const response = await axios.post(
-        "https://furniro.up.railway.app/auth/signup",
-        {
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-        }
-      );
+      const response = await axios.post(`${BACKEND_API}/auth/signup`, {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      });
       localStorage.setItem("JWT", response.data.token);
       Cookies.set("loggedEmail", formData.email);
       Cookies.set("loggedIn", "true");

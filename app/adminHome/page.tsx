@@ -48,7 +48,7 @@ const AdminDashboard = () => {
 
             <button
               onClick={handleDeleteProduct}
-              className={classes.dropdownButton}>
+              className={`${classes.dropdownButton} ${classes.delete}`}>
               <MdDelete /> Delete Product
             </button>
           </div>

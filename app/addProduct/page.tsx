@@ -5,6 +5,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
 import classes from "./addProduct.module.css";
+const BACKEND_API = process.env.NEXT_PUBLIC_API_URL;
+
 const AddProduct = () => {
   const token = Cookies.get("JWT");
   const [formData, setFormData] = useState({
@@ -24,7 +26,7 @@ const AddProduct = () => {
     console.log("Form Data = ", formData.image?.name);
     try {
       await axios.post(
-        "https://furniro.up.railway.app/createProduct",
+        `${BACKEND_API}/createProduct`,
         {
           productName: formData.productName,
           description: formData.description,

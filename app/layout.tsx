@@ -5,6 +5,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import "./globals.css";
 
+const BACKEND_API = process.env.NEXT_PUBLIC_API_URL;
+
 export default function RootLayout({
   children,
 }: {
@@ -23,7 +25,7 @@ export default function RootLayout({
     if (token) {
       try {
         const response = await axios.get(
-          `https://furniro.up.railway.app/auth/userInfo?token=${token}`
+          `${BACKEND_API}/auth/userInfo?token=${token}`
         );
         setRole(response.data.role);
       } catch (err) {

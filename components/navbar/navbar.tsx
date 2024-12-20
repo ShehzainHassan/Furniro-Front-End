@@ -14,13 +14,19 @@ import classes from "./navbar.module.css";
 type NavbarProps = {
   role?: string[];
 };
+const BACKEND_API = process.env.NEXT_PUBLIC_API_URL;
+
 export default function Navbar({ role }: NavbarProps) {
   const [isCartVisible, setIsCartVisible] = useState(false);
+  const [isFavoriteVisible, setIsFavoriteVisible] = useState(false);
   const [cartItems, setCartItems] = useState(0);
+  const [favoriteItems, setFavoriteItems] = useState(0);
+
   const email = Cookies.get("loggedEmail");
 
   useEffect(() => {
     getCartItemCount();
+    getFavoritesItemCount();
   }, []);
 
   if (typeof window == "undefined") return null;
@@ -35,17 +41,20 @@ export default function Navbar({ role }: NavbarProps) {
     window.location.href = "/";
   };
 
+  const toggleFavorites = () => {
+    setIsFavoriteVisible(!isFavoriteVisible);
+  };
   const toggleCart = () => {
     setIsCartVisible(!isCartVisible);
   };
-  const close = () => {
+  const closeCart = () => {
     setIsCartVisible(false);
+    setIsFavoriteVisible(false);
   };
-
   const getCartItemCount = async () => {
     try {
       const response = await axios.get(
-        `https://furniro.up.railway.app/getCart?email=${email}`,
+        `${BACKEND_API}/getCart?email=${email}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -53,6 +62,19 @@ export default function Navbar({ role }: NavbarProps) {
       setCartItems(response.data.cart.length);
     } catch (err) {
       console.error("Error loading cart items", err);
+    }
+  };
+  const getFavoritesItemCount = async () => {
+    try {
+      const response = await axios.get(
+        `${BACKEND_API}/userDetails?email=${email}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setFavoriteItems(response.data.favorites.length);
+    } catch (err) {
+      console.error("Error loading user details ", err);
     }
   };
   if (!email) {
@@ -90,8 +112,11 @@ export default function Navbar({ role }: NavbarProps) {
           <p>
             <IoPersonOutline />
           </p>
-          <p>
+          <p className={classes.cartIcon} onClick={toggleFavorites}>
             <CiHeart />
+            {favoriteItems > 0 && (
+              <span className={classes.itemCount}>{favoriteItems}</span>
+            )}
           </p>
           <p className={classes.cartIcon} onClick={toggleCart}>
             <AiOutlineShoppingCart />
@@ -103,8 +128,22 @@ export default function Navbar({ role }: NavbarProps) {
       </div>
 
       {isCartVisible && (
-        <Suspense fallback={<div>Loading cart...</div>}>
-          <ShoppingCart isVisible={isCartVisible} closeCart={close} />
+        <Suspense fallback={<div>Loading...</div>}>
+          <ShoppingCart
+            isVisible={isCartVisible}
+            cartType="cart"
+            closeCart={closeCart}
+          />
+        </Suspense>
+      )}
+
+      {isFavoriteVisible && (
+        <Suspense fallback={<div>Loading...</div>}>
+          <ShoppingCart
+            isVisible={isFavoriteVisible}
+            cartType="favorites"
+            closeCart={closeCart}
+          />
         </Suspense>
       )}
     </>

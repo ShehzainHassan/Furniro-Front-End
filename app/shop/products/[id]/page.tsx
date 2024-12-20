@@ -5,6 +5,8 @@ import Cookies from "js-cookie";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Products from "../page";
 import classes from "./page.module.css";
 
@@ -18,6 +20,7 @@ interface Product {
   discount: number;
   isNew: boolean;
 }
+const BACKEND_API = process.env.NEXT_PUBLIC_API_URL;
 
 export default function ProductDetails() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -25,6 +28,7 @@ export default function ProductDetails() {
   const router = useRouter();
   const pathname = usePathname();
   const token = localStorage.getItem("JWT");
+  const loggedEmail = Cookies.get("loggedEmail");
 
   const calculateCurrentPrice = (originalPrice: number, discount: number) => {
     if (discount > 0) {
@@ -34,12 +38,11 @@ export default function ProductDetails() {
   };
 
   const updateUserCart = async () => {
-    const userEmail = Cookies.get("loggedEmail");
     try {
       await axios.patch(
-        "https://furniro.up.railway.app/updateCart",
+        `${BACKEND_API}/updateCart`,
         {
-          email: userEmail,
+          email: loggedEmail,
           productId: selectedProduct?._id,
           qty: quantity,
         },
@@ -56,12 +59,9 @@ export default function ProductDetails() {
   const loadSelectedProduct = async () => {
     const id = pathname.split("/").pop();
     try {
-      const response = await axios.get(
-        `https://furniro.up.railway.app/product/${id}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.get(`${BACKEND_API}/product/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setSelectedProduct(response.data);
     } catch (err) {
       console.error("Error loading product details ", err);
@@ -80,7 +80,45 @@ export default function ProductDetails() {
       router.push(`/checkout?Name=${productName}&Qty=${qty}&Price=${price}`);
     }
   };
-
+  const addProductToFavorites = async () => {
+    try {
+      const response = await axios.post(
+        `${BACKEND_API}/addFavorite/${loggedEmail}/${selectedProduct._id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (response) {
+        toast.success("Product added to favorites", {
+          position: "bottom-center",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: false,
+          style: {
+            backgroundColor: "#4caf50",
+            color: "#fff",
+          },
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      }
+    } catch (err) {
+      console.error("Error adding product to favorites", err);
+      toast.error("Failed to add product to favorites", {
+        position: "bottom-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        style: {
+          backgroundColor: "red",
+          color: "#fff",
+        },
+      });
+    }
+  };
   useEffect(() => {
     loadSelectedProduct();
   }, [pathname]);
@@ -196,6 +234,12 @@ export default function ProductDetails() {
                   className={classes.btn2}
                   disabled={quantity === 0}>
                   Checkout
+                </button>
+
+                <button
+                  onClick={addProductToFavorites}
+                  className={classes.btn2}>
+                  Add To Favorites
                 </button>
               </div>
             </div>

@@ -13,17 +13,25 @@ interface Cart {
 
 interface CartProps {
   isVisible: boolean;
+  cartType: string;
   closeCart: () => void;
 }
 
-export default function ShoppingCart({ isVisible, closeCart }: CartProps) {
+const BACKEND_API = process.env.NEXT_PUBLIC_API_URL;
+
+export default function ShoppingCart({
+  isVisible,
+  cartType,
+  closeCart,
+}: CartProps) {
   const [products, setProducts] = useState<(Product & { quantity: number })[]>(
     []
   );
+  const [favorites, setFavorites] = useState<Product[]>([]);
   const [cartTotal, setCartTotal] = useState<number>(0);
+
   const email = Cookies.get("loggedEmail");
   const token = Cookies.get("JWT");
-  console.log("token = ", token);
 
   const calculateCurrentPrice = (originalPrice: number, discount: number) => {
     if (discount > 0) {
@@ -35,7 +43,7 @@ export default function ShoppingCart({ isVisible, closeCart }: CartProps) {
   const loadUserCart = async () => {
     try {
       const response = await axios.get(
-        `https://furniro.up.railway.app/getCart?email=${email}`,
+        `${BACKEND_API}/getCart?email=${email}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -46,26 +54,11 @@ export default function ShoppingCart({ isVisible, closeCart }: CartProps) {
     }
   };
 
-  const deleteFromCart = async (_id: string) => {
-    try {
-      await axios.delete(
-        `https://furniro.up.railway.app/removeProduct/${email}/${_id}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      loadUserCart();
-      window.location.reload();
-    } catch (err) {
-      console.error("Error deleting product from cart ", err);
-    }
-  };
-
   const loadProducts = async (cartItems: Cart[]) => {
     try {
       const productRequests = cartItems.map(async (item) => {
         const productResponse = await axios.get(
-          `https://furniro.up.railway.app/product/${item.id}`,
+          `${BACKEND_API}/product/${item.id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -83,6 +76,18 @@ export default function ShoppingCart({ isVisible, closeCart }: CartProps) {
     }
   };
 
+  const deleteFromCart = async (_id: string) => {
+    try {
+      await axios.delete(`${BACKEND_API}/removeProduct/${email}/${_id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      loadUserCart();
+      window.location.reload();
+    } catch (err) {
+      console.error("Error deleting product from cart ", err);
+    }
+  };
+
   const calculateCartTotal = (products: (Product & { quantity: number })[]) => {
     const total = products.reduce(
       (sum, product) =>
@@ -94,66 +99,168 @@ export default function ShoppingCart({ isVisible, closeCart }: CartProps) {
     setCartTotal(total);
   };
 
+  const loadUserFavorites = async () => {
+    try {
+      const response = await axios.get(
+        `${BACKEND_API}/userDetails?email=${email}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      const favoriteProductIds = response.data?.favorites;
+
+      if (favoriteProductIds && favoriteProductIds.length > 0) {
+        const productRequests = favoriteProductIds.map(async (favorite) => {
+          try {
+            const productResponse = await axios.get(
+              `${BACKEND_API}/product/${favorite._id}`,
+              {
+                headers: { Authorization: `Bearer ${token}` },
+              }
+            );
+
+            return productResponse.data;
+          } catch (err) {
+            console.error(
+              `Error fetching product details for ID: ${favorite._id}`,
+              err
+            );
+          }
+        });
+
+        const productDetails = await Promise.all(productRequests);
+        setFavorites(productDetails);
+      } else {
+        console.log("No favorite products found.");
+      }
+    } catch (err) {
+      console.error("Error loading user favorites", err);
+    }
+  };
+
+  const removeFavorite = async (id: string) => {
+    try {
+      await axios.delete(`${BACKEND_API}/removeFavorite/${email}/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      loadUserFavorites();
+      window.location.reload();
+    } catch (err) {
+      console.error("Error removing favorite", err);
+    }
+  };
   useEffect(() => {
-    loadUserCart();
-  }, [isVisible]);
+    if (cartType === "cart") {
+      loadUserCart();
+    } else if (cartType === "favorites") {
+      loadUserFavorites();
+    }
+  }, [isVisible, cartType]);
 
   return (
     <div className={`${classes.container} ${isVisible ? classes.show : ""}`}>
       <div className={classes.subContainer}>
-        <div className={classes.cart}>
-          <h1>Shopping Cart</h1>
-          <button onClick={closeCart} className={classes.close}>
-            X
-          </button>
-        </div>
-        {products?.length > 0 ? (
-          products?.map((product, index) => {
-            const currentPrice = calculateCurrentPrice(
-              product.originalPrice,
-              product.discount
-            );
-            return (
-              <div className={classes.product} key={index}>
-                <div className={classes.cartItems}>
-                  <div className={classes.productInfo}>
-                    <Image
-                      src={`/images/${product.image}`}
-                      alt="img"
-                      width={100}
-                      height={100}
-                    />
-                    <div className={classes.productDetails}>
-                      <p>{product.productName}</p>
-                      <div className={classes.productQtyPrice}>
-                        <p>{product.quantity}</p>
-                        <p>x</p>
-                        <p>Rs {currentPrice.toFixed(0)}</p>
+        {cartType === "cart" ? (
+          <>
+            <div className={classes.cart}>
+              <h1>Shopping Cart</h1>
+              <button onClick={closeCart} className={classes.close}>
+                X
+              </button>
+            </div>
+            {products.length > 0 ? (
+              products.map((product, index) => {
+                const currentPrice = calculateCurrentPrice(
+                  product.originalPrice,
+                  product.discount
+                );
+                return (
+                  <div className={classes.product} key={index}>
+                    <div className={classes.cartItems}>
+                      <div className={classes.productInfo}>
+                        <Image
+                          src={`/images/${product.image}`}
+                          alt="img"
+                          width={100}
+                          height={100}
+                        />
+                        <div className={classes.productDetails}>
+                          <p>{product.productName}</p>
+                          <div className={classes.productQtyPrice}>
+                            <p>{product.quantity}</p>
+                            <p>x</p>
+                            <p>Rs {currentPrice.toFixed(0)}</p>
+                          </div>
+                        </div>
+                        <div className={classes.deleteButton}>
+                          <button onClick={() => deleteFromCart(product._id)}>
+                            Delete
+                          </button>
+                        </div>
                       </div>
                     </div>
-                    <div className={classes.deleteButton}>
-                      <button onClick={() => deleteFromCart(product._id)}>
-                        Delete
+                  </div>
+                );
+              })
+            ) : (
+              <div>
+                <p>Your cart is empty</p>
+              </div>
+            )}
+            <div className={classes.cartTotal}>
+              <p>
+                Total:{" "}
+                <span className={classes.finalTotal}>
+                  Rs {cartTotal.toFixed(0)}
+                </span>
+              </p>
+            </div>
+          </>
+        ) : cartType === "favorites" ? (
+          <>
+            <div className={classes.cart}>
+              <h1>Favorites</h1>
+              <button onClick={closeCart} className={classes.close}>
+                X
+              </button>
+            </div>
+            {favorites.length > 0 ? (
+              favorites.map((favorite, index) => (
+                <div className={classes.product} key={index}>
+                  <div className={classes.cartItems}>
+                    <div className={classes.favoriteProducts}>
+                      <Image
+                        src={`/images/${favorite.image}`}
+                        alt="img"
+                        width={100}
+                        height={100}
+                      />
+                      <div className={classes.productDetails}>
+                        <p>{favorite.productName}</p>
+                        <p>
+                          Category:{" "}
+                          <span style={{ fontWeight: "bold" }}>
+                            {favorite.category}
+                          </span>
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => removeFavorite(favorite._id)}
+                        className={classes.remove}>
+                        X
                       </button>
                     </div>
                   </div>
                 </div>
+              ))
+            ) : (
+              <div>
+                <p>No favorite products found</p>
               </div>
-            );
-          })
-        ) : (
-          <div>
-            <p>Your cart is empty</p>
-          </div>
-        )}
-        <div className={classes.cartTotal}>
-          <p>
-            Total:{" "}
-            <span className={classes.finalTotal}>
-              Rs {cartTotal.toFixed(0)}
-            </span>
-          </p>
-        </div>
+            )}
+          </>
+        ) : null}
       </div>
     </div>
   );

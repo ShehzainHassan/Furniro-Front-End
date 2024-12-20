@@ -8,6 +8,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import classes2 from "./page.module.css";
+
+const BACKEND_API = process.env.NEXT_PUBLIC_API_URL;
+
 export default function Login() {
   const [formData, setFormData] = useState({
     email: "",
@@ -26,7 +29,7 @@ export default function Login() {
     const userEmail = Cookies.get("loggedEmail");
     try {
       const response = await axios.get(
-        `https://furniro.up.railway.app/getUserRole?email=${userEmail}`
+        `${BACKEND_API}/getUserRole?email=${userEmail}`
       );
       if (response.data.includes("ADMIN")) {
         window.location.href = "/adminHome";
@@ -41,13 +44,10 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        "https://furniro.up.railway.app/auth/login",
-        {
-          email: formData.email,
-          password: formData.password,
-        }
-      );
+      const response = await axios.post(`${BACKEND_API}/auth/login`, {
+        email: formData.email,
+        password: formData.password,
+      });
 
       localStorage.setItem("JWT", response.data.token);
       Cookies.set("loggedEmail", formData.email);

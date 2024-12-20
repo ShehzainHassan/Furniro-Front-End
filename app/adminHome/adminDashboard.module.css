@@ -31,6 +31,10 @@
   width: 200px;
   text-align: center;
   transition: background-color 0.3s, transform 0.3s ease;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
 }
 
 .button:hover {
@@ -62,6 +66,9 @@
 .dropdownButton:hover {
   background-color: #218838;
   transform: translateY(-2px);
+}
+.delete:hover {
+  background-color: red;
 }
 
 .dropdown {

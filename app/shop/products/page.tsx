@@ -27,6 +27,8 @@ interface ProductProps {
   isEditing?: boolean;
 }
 
+const BACKEND_API = process.env.NEXT_PUBLIC_API_URL;
+
 export default function Products({
   heading,
   itemsToLoad = 8,
@@ -53,7 +55,7 @@ export default function Products({
 
   const loadProducts = async () => {
     try {
-      const url = "https://furniro.up.railway.app/getProducts";
+      const url = `${BACKEND_API}/getProducts`;
       const response = await axios.get(url, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -105,7 +107,7 @@ export default function Products({
 
   const deleteProduct = async (id: string) => {
     try {
-      await axios.delete(`https://furniro.up.railway.app/deleteProduct/${id}`, {
+      await axios.delete(`${BACKEND_API}/deleteProduct/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("Product Deleted Successfully", {
@@ -273,7 +275,7 @@ export default function Products({
         </div>
       </div>
 
-      {showMore && (
+      {showMore && path.includes("/shop") && (
         <button onClick={showMoreProducts} className={classes.btn}>
           Show More
         </button>

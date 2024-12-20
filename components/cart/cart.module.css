@@ -49,6 +49,11 @@
   display: flex;
   justify-content: space-between;
 }
+.favoriteProducts {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
 .deleteButton {
   display: flex;
   align-items: center;
@@ -75,6 +80,14 @@
 }
 .finalTotal {
   color: #b88e3b;
+}
+.remove {
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: red;
+  max-block-size: fit-content;
 }
 @media (max-width: 768px) {
   .container {

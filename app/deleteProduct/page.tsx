@@ -2,6 +2,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Products from "../shop/products/page";
+const BACKEND_API = process.env.NEXT_PUBLIC_API_URL;
 
 export default function DeleteProduct() {
   const [totalProducts, setTotalProducts] = useState<number>(0);
@@ -17,12 +18,9 @@ export default function DeleteProduct() {
 
   const loadProducts = async () => {
     try {
-      const response = await axios.get(
-        "https://furniro.up.railway.app/getProducts",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.get(`${BACKEND_API}/getProducts`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setTotalProducts(response.data.length);
     } catch (err) {
       console.error("Error loading Products", err);

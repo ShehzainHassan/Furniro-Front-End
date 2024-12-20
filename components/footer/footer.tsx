@@ -3,6 +3,8 @@ import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import classes from "./footer.module.css";
+const BACKEND_API = process.env.NEXT_PUBLIC_API_URL;
+
 export default function Footer() {
   const [userRole, setUserRole] = useState<string[]>([]);
   const [token, setToken] = useState<string | null>(null);
@@ -17,7 +19,7 @@ export default function Footer() {
     if (!token) return;
     try {
       const response = await axios.get(
-        `https://furniro.up.railway.app/auth/userInfo?token=${token}`
+        `${BACKEND_API}/auth/userInfo?token=${token}`
       );
       setUserRole(response.data.role);
     } catch (err) {

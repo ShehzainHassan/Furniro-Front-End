@@ -7,6 +7,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import classes from "./page.module.css";
 
+const BACKEND_API = process.env.NEXT_PUBLIC_API_URL;
+
 export default function EditProductPage() {
   const [isDiscount, setIsDiscount] = useState(false);
   const [isNew, setIsNew] = useState(false);
@@ -30,12 +32,9 @@ export default function EditProductPage() {
 
   const loadSelectedProduct = async () => {
     try {
-      const response = await axios.get(
-        `https://furniro.up.railway.app/product/${id}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.get(`${BACKEND_API}/product/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setSelectedProduct(response.data);
 
       setFormData({
@@ -74,7 +73,7 @@ export default function EditProductPage() {
   const updateProduct = async () => {
     try {
       await axios.put(
-        `https://furniro.up.railway.app/updateProduct/${id}`,
+        `${BACKEND_API}/updateProduct/${id}`,
         {
           productName: formData.productName,
           description: formData.description,
