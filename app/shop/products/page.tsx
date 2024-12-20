@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import classes from "./products.module.css";
-
+import Cookies from "js-cookie";
 export interface Product {
   _id: string;
   productName: string;
@@ -51,7 +51,7 @@ export default function Products({
 
   if (typeof window === "undefined") return null;
 
-  const token = localStorage.getItem("JWT");
+  const token = Cookies.get("JWT");
 
   const loadProducts = async () => {
     try {

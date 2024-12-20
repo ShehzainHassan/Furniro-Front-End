@@ -1,6 +1,7 @@
 "use client";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 import Products from "../shop/products/page";
 
 const BACKEND_API = process.env.NEXT_PUBLIC_API_URL;
@@ -14,7 +15,7 @@ export default function EditProduct() {
   }, []);
 
   if (typeof window == "undefined") return null;
-  const token = localStorage.getItem("JWT");
+  const token = Cookies.get("JWT");
 
   const loadProducts = async () => {
     try {

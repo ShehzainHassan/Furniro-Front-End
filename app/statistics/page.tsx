@@ -4,7 +4,7 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { useEffect, useState } from "react";
 import classes from "./page.module.css";
-
+import Cookies from "js-cookie";
 const BACKEND_API = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Statistics() {
@@ -75,7 +75,7 @@ export default function Statistics() {
     loadProductCount();
   }, []);
   if (typeof window == "undefined") return null;
-  const token = localStorage.getItem("JWT");
+  const token = Cookies.get("JWT");
 
   const productOptions = {
     chart: {

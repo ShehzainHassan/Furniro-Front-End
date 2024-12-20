@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import classes from "./page.module.css";
+import Cookies from "js-cookie";
 
 const BACKEND_API = process.env.NEXT_PUBLIC_API_URL;
 
@@ -65,7 +66,7 @@ export default function EditProductPage() {
   };
 
   if (typeof window == "undefined") return null;
-  const token = localStorage.getItem("JWT");
+  const token = Cookies.get("JWT");
 
   if (!selectedProduct) {
     return null;

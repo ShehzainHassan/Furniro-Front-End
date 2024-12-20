@@ -27,7 +27,7 @@ export default function ProductDetails() {
   const [quantity, setQuantity] = useState(1);
   const router = useRouter();
   const pathname = usePathname();
-  const token = localStorage.getItem("JWT");
+  const token = Cookies.get("JWT");
   const loggedEmail = Cookies.get("loggedEmail");
 
   const calculateCurrentPrice = (originalPrice: number, discount: number) => {

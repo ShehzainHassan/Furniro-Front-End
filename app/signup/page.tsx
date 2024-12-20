@@ -83,7 +83,6 @@ export default function Signup() {
         email: formData.email,
         password: formData.password,
       });
-      localStorage.setItem("JWT", response.data.token);
       Cookies.set("loggedEmail", formData.email);
       Cookies.set("loggedIn", "true");
       Cookies.set("JWT", response.data.token);

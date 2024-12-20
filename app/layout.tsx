@@ -4,6 +4,7 @@ import Navbar from "@/components/navbar/navbar";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import "./globals.css";
+import Cookies from "js-cookie";
 
 const BACKEND_API = process.env.NEXT_PUBLIC_API_URL;
 
@@ -17,7 +18,7 @@ export default function RootLayout({
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const _token = localStorage.getItem("JWT");
+      const _token = Cookies.get("JWT");
       setToken(_token);
     }
   }, []);

@@ -3,6 +3,7 @@ import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import classes from "./footer.module.css";
+import Cookies from "js-cookie";
 const BACKEND_API = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Footer() {
@@ -11,7 +12,7 @@ export default function Footer() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const _token = localStorage.getItem("JWT");
+      const _token = Cookies.get("JWT");
       setToken(_token);
     }
   }, []);

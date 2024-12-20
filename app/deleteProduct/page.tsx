@@ -2,6 +2,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Products from "../shop/products/page";
+import Cookies from "js-cookie";
 const BACKEND_API = process.env.NEXT_PUBLIC_API_URL;
 
 export default function DeleteProduct() {
@@ -14,7 +15,7 @@ export default function DeleteProduct() {
 
   if (typeof window == "undefined") return null;
 
-  const token = localStorage.getItem("JWT");
+  const token = Cookies.get("JWT");
 
   const loadProducts = async () => {
     try {

@@ -31,10 +31,9 @@ export default function Navbar({ role }: NavbarProps) {
 
   if (typeof window == "undefined") return null;
 
-  const token = localStorage.getItem("JWT");
+  const token = Cookies.get("JWT");
 
   const Logout = () => {
-    localStorage.clear();
     Cookies.remove("loggedEmail");
     Cookies.remove("loggedIn");
     Cookies.remove("JWT");
