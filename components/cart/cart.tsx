@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import classes from "./cart.module.css";
 import { useRouter } from "next/navigation";
-import CheckoutPage from "../checkout/checkout";
+
 interface Cart {
   id: string;
   qty: number;
