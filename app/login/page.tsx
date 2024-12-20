@@ -8,6 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import classes2 from "./page.module.css";
+import { redirectToHome } from "@/utils/authUtils";
 
 const BACKEND_API = process.env.NEXT_PUBLIC_API_URL;
 
@@ -23,22 +24,6 @@ export default function Login() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({ ...prevState, [name]: value }));
-  };
-
-  const redirectToHome = async () => {
-    const userEmail = Cookies.get("loggedEmail");
-    try {
-      const response = await axios.get(
-        `${BACKEND_API}/getUserRole?email=${userEmail}`
-      );
-      if (response.data.includes("ADMIN")) {
-        window.location.href = "/adminHome";
-      } else {
-        window.location.href = "/home";
-      }
-    } catch (err) {
-      console.error("Error redirecting to Home ", err);
-    }
   };
   const checkUserInDB = async (e: React.FormEvent) => {
     e.preventDefault();

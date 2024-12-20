@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import classes from "./page.module.css";
+import { redirectToHome } from "@/utils/authUtils";
 
 interface ApiError {
   status: string;
@@ -61,21 +62,7 @@ export default function Signup() {
       saveUserToDB();
     }
   };
-  const redirectToHome = async () => {
-    const userEmail = Cookies.get("loggedEmail");
-    try {
-      const response = await axios.get(
-        `${BACKEND_API}/getUserRole?email=${userEmail}`
-      );
-      if (response.data.includes("ADMIN")) {
-        window.location.href = "/adminHome";
-      } else {
-        window.location.href = "/home";
-      }
-    } catch (err) {
-      console.error("Error redirecting to Home ", err);
-    }
-  };
+
   const saveUserToDB = async () => {
     try {
       const response = await axios.post(`${BACKEND_API}/auth/signup`, {
