@@ -12,9 +12,12 @@ export function middleware(req) {
   const url = req.url;
   const adminOnlyRoutes = [
     "/addProduct",
+    "/addUser",
     "/adminHome",
     "/deleteProduct",
+    "/deleteUser",
     "/editProduct",
+    "/editUser",
     "/statistics",
   ];
   const userRoutes = [
