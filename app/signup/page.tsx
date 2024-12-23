@@ -1,21 +1,28 @@
 "use client";
 import loginImg from "@/public/images/login.png";
 import logo from "@/public/images/logo.png";
+import { redirectToHome } from "@/utils/authUtils";
 import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import classes from "./page.module.css";
-import { redirectToHome } from "@/utils/authUtils";
 
 interface ApiError {
   status: string;
   message: string;
 }
+
 const BACKEND_API = process.env.NEXT_PUBLIC_API_URL;
 
-export default function Signup() {
+interface SignupProps {
+  isAdmin?: boolean;
+}
+
+export default function Signup({ isAdmin }: SignupProps) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -70,10 +77,27 @@ export default function Signup() {
         email: formData.email,
         password: formData.password,
       });
-      Cookies.set("loggedEmail", formData.email);
-      Cookies.set("loggedIn", "true");
-      Cookies.set("JWT", response.data.token);
-      redirectToHome();
+      if (!isAdmin) {
+        Cookies.set("loggedEmail", formData.email);
+        Cookies.set("loggedIn", "true");
+        Cookies.set("JWT", response.data.token);
+        redirectToHome();
+      } else {
+        toast.success("User Created Successfully", {
+          position: "bottom-center",
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: false,
+          style: {
+            backgroundColor: "green",
+            color: "#fff",
+          },
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
+      }
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError<ApiError>;
@@ -97,10 +121,12 @@ export default function Signup() {
     <form onSubmit={handleSubmit}>
       <div className={classes.container}>
         <div className={classes.login}>
-          <div className={classes.logo}>
-            <Image src={logo} alt="logo" />
-            <p>Welcome</p>
-          </div>
+          {!isAdmin && (
+            <div className={classes.logo}>
+              <Image src={logo} alt="logo" />
+              <p>Welcome</p>
+            </div>
+          )}
           <div className={classes.signIn}>
             <h1>Sign Up</h1>
             <div className={classes.email_Pass}>
@@ -163,27 +189,32 @@ export default function Signup() {
                 <p className={classes.error}>{errors.confirmPassword}</p>
               )}
             </div>
-            <div>
-              Already have an account?{" "}
-              <span className={classes.loginText}>
-                <Link href="/login">Login</Link>
-              </span>
-            </div>
+            {!isAdmin && (
+              <div>
+                Already have an account?{" "}
+                <span className={classes.loginText}>
+                  <Link href="/login">Login</Link>
+                </span>
+              </div>
+            )}
             <button
               type="submit"
               className={`${classes.inputBox} ${classes.btn}`}>
-              Register
+              {isAdmin ? "Add User" : "Register"}
             </button>
           </div>
         </div>
-        <div className={classes.image}>
-          <Image
-            className={classes.loginImg}
-            src={loginImg}
-            alt="login-image"
-          />
-        </div>
+        {!isAdmin && (
+          <div className={classes.image}>
+            <Image
+              className={classes.loginImg}
+              src={loginImg}
+              alt="login-image"
+            />
+          </div>
+        )}
       </div>
+      <ToastContainer />
     </form>
   );
 }

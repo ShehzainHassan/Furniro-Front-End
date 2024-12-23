@@ -1,0 +1,42 @@
+.container {
+  padding: 30px 50px;
+}
+.title {
+  text-align: center;
+}
+.table {
+  border: 1px solid;
+  border-radius: 10px;
+}
+.tableHeading {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid;
+  padding: 10px;
+  font-weight: bold;
+}
+.userDetail {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  align-items: center;
+}
+.user {
+  background-color: rgb(184, 247, 102);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.admin {
+  background-color: rgb(171, 109, 230);
+  padding: 10px;
+  border-radius: 10px;
+}
+.action {
+  padding: 10px;
+  border-radius: 10px;
+}
+.delete {
+  background-color: rgb(126, 0, 0);
+  cursor: pointer;
+}
