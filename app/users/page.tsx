@@ -85,6 +85,7 @@ export default function UsersList({ isDeleting, isEditing }: UserListProps) {
               }>
               {user.role}
             </p>
+
             {isDeleting && (
               <button
                 disabled={user.role.includes("ADMIN")}
@@ -94,7 +95,9 @@ export default function UsersList({ isDeleting, isEditing }: UserListProps) {
               </button>
             )}
             {isEditing && (
-              <button className={`${classes.action} ${classes.edit}`}>
+              <button
+                disabled={user.role.includes("ADMIN")}
+                className={`${classes.action} ${classes.edit}`}>
                 Edit
               </button>
             )}

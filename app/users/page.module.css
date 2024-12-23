@@ -40,3 +40,7 @@
   background-color: rgb(126, 0, 0);
   cursor: pointer;
 }
+.edit {
+  background-color: rgb(37, 245, 37);
+  cursor: pointer;
+}

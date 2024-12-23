@@ -42,7 +42,7 @@ const AdminDashboard = () => {
   };
 
   const handleEditUser = () => {
-    // router.push("/editUser");
+    router.push("/editUser");
   };
 
   const handleDeleteUser = () => {
