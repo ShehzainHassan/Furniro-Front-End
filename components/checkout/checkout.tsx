@@ -12,7 +12,6 @@ export default function CheckoutPage() {
   const qty = searchParams.get("Qty");
   const price = searchParams.get("Price");
   const fromCart = searchParams.get("fromCart");
-  console.log(fromCart);
   const priceNum = price ? parseFloat(price) : 0;
   const qtyNum = qty ? parseInt(qty) : 0;
   const total = priceNum * qtyNum;

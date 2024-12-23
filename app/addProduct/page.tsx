@@ -114,7 +114,9 @@ const AddProduct = () => {
             <option>Chair</option>
             <option>Table</option>
             <option>Sofa</option>
+            <option>Bed</option>
             <option>Decor</option>
+            <option>Other</option>
           </select>
           <label htmlFor="image">Image</label>
           <input

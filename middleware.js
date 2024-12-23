@@ -39,7 +39,6 @@ export function middleware(req) {
       adminOnlyRoutes.some((route) => url.includes(route)) &&
       !decodedToken?.role.includes("ADMIN")
     ) {
-      console.log("USER");
       return NextResponse.redirect("https://furniro.up.railway.app/home");
     }
   }

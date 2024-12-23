@@ -1,12 +1,12 @@
 "use client";
 import { Product } from "@/app/shop/products/page";
 import axios from "axios";
+import Cookies from "js-cookie";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import classes from "./page.module.css";
-import Cookies from "js-cookie";
 
 const BACKEND_API = process.env.NEXT_PUBLIC_API_URL;
 
@@ -219,7 +219,9 @@ export default function EditProductPage() {
             <option>Chair</option>
             <option>Table</option>
             <option>Sofa</option>
+            <option>Bed</option>
             <option>Decor</option>
+            <option>Other</option>
           </select>
         </div>
 

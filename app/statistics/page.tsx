@@ -18,7 +18,7 @@ export default function Statistics() {
   }
 
   interface ProductCategory {
-    category: "Chair" | "Sofa" | "Table" | "Decor";
+    category: "Chair" | "Sofa" | "Table" | "Bed" | "Decor" | "Other";
   }
   const [userCount, setUserCount] = useState<number>(0);
   const [productCount, setProductCount] = useState<number>(0);
@@ -64,7 +64,9 @@ export default function Statistics() {
         { name: "Chair", y: categoryCount["Chair"] || 0, color: "#7c7cf9" },
         { name: "Sofa", y: categoryCount["Sofa"] || 0, color: "#f0ad4e" },
         { name: "Table", y: categoryCount["Table"] || 0, color: "#5bc0de" },
+        { name: "Bed", y: categoryCount["Bed"] || 0, color: "#ddff00" },
         { name: "Decor", y: categoryCount["Decor"] || 0, color: "#5cb85c" },
+        { name: "Other", y: categoryCount["Other"] || 0, color: "#000000" },
       ]);
     } catch (err) {
       console.error("Error loading products", err);

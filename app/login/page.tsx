@@ -36,7 +36,9 @@ export default function Login() {
 
       Cookies.set("loggedEmail", formData.email);
       Cookies.set("loggedIn", "true");
-      Cookies.set("JWT", response.data.token);
+      Cookies.set("JWT", response.data.token, {
+        expires: 1 / 24,
+      });
       redirectToHome();
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {
