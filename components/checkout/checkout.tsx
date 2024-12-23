@@ -1,10 +1,13 @@
 "use client";
 import classes from "@/app/checkout/checkout.module.css";
+import axios from "axios";
+import Cookies from "js-cookie";
 import { useSearchParams } from "next/navigation";
-import Header from "../../components/header/header";
-import Footer from "../footer/footer";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Header from "../../components/header/header";
+import Footer from "../footer/footer";
+const BACKEND_API = process.env.NEXT_PUBLIC_API_URL;
 
 export default function CheckoutPage() {
   const searchParams = useSearchParams();
@@ -15,9 +18,22 @@ export default function CheckoutPage() {
   const priceNum = price ? parseFloat(price) : 0;
   const qtyNum = qty ? parseInt(qty) : 0;
   const total = priceNum * qtyNum;
-
+  const email = Cookies.get("loggedEmail");
+  const token = Cookies.get("JWT");
+  const clearUserCart = async () => {
+    try {
+      await axios.delete(`${BACKEND_API}/clearCart/${email}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    } catch (err) {
+      console.error("Error clearing user cart: ", err);
+    }
+  };
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (fromCart) {
+      clearUserCart();
+    }
     toast.success("Purchase Successful", {
       position: "bottom-center",
       autoClose: 2000,
