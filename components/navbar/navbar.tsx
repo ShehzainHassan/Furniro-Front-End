@@ -20,6 +20,7 @@ const BACKEND_API = process.env.NEXT_PUBLIC_API_URL;
 export default function Navbar({ role }: NavbarProps) {
   const [isCartVisible, setIsCartVisible] = useState(false);
   const [isFavoriteVisible, setIsFavoriteVisible] = useState(false);
+  const [isProfileVisible, setIsProfileVisible] = useState(false);
   const [cartItems, setCartItems] = useState(0);
   const [favoriteItems, setFavoriteItems] = useState(0);
 
@@ -37,6 +38,9 @@ export default function Navbar({ role }: NavbarProps) {
     window.location.href = "/";
   };
 
+  const toggleProfile = () => {
+    setIsProfileVisible(!isProfileVisible);
+  };
   const toggleFavorites = () => {
     setIsFavoriteVisible(!isFavoriteVisible);
   };
@@ -46,6 +50,7 @@ export default function Navbar({ role }: NavbarProps) {
   const closeCart = () => {
     setIsCartVisible(false);
     setIsFavoriteVisible(false);
+    setIsProfileVisible(false);
   };
   const getCartItemCount = async () => {
     const userInfo = await userDetails(token);
@@ -104,7 +109,7 @@ export default function Navbar({ role }: NavbarProps) {
           </p>
         </div>
         <div className={classes.navIcons}>
-          <p>
+          <p className={classes.cartIcon} onClick={toggleProfile}>
             <IoPersonOutline />
           </p>
           <p className={classes.cartIcon} onClick={toggleFavorites}>
@@ -137,6 +142,16 @@ export default function Navbar({ role }: NavbarProps) {
           <ShoppingCart
             isVisible={isFavoriteVisible}
             modalType="favorites"
+            closeCart={closeCart}
+          />
+        </Suspense>
+      )}
+
+      {isProfileVisible && (
+        <Suspense fallback={<div>Loading...</div>}>
+          <ShoppingCart
+            isVisible={isProfileVisible}
+            modalType="profile"
             closeCart={closeCart}
           />
         </Suspense>

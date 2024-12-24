@@ -1,12 +1,14 @@
 "use client";
 import { Product } from "@/app/shop/products/page";
+import { userDetails } from "@/utils/authUtils";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import classes from "./cart.module.css";
 import { useRouter } from "next/navigation";
-import { userDetails } from "@/utils/authUtils";
+import { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import classes from "./cart.module.css";
 
 interface Cart {
   id: string;
@@ -31,9 +33,22 @@ export default function ShoppingCart({
   );
   const [favorites, setFavorites] = useState<Product[]>([]);
   const [cartTotal, setCartTotal] = useState<number>(0);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
   const token = Cookies.get("JWT");
   const router = useRouter();
+
   const calculateCurrentPrice = (originalPrice: number, discount: number) => {
     if (discount > 0) {
       return originalPrice - originalPrice * (discount / 100);
@@ -80,7 +95,6 @@ export default function ShoppingCart({
 
   const deleteFromCart = async (_id: string) => {
     const userInfo = await userDetails(token);
-
     try {
       await axios.delete(
         `${BACKEND_API}/removeProduct/${userInfo.email}/${_id}`,
@@ -108,7 +122,6 @@ export default function ShoppingCart({
 
   const loadUserFavorites = async () => {
     const userInfo = await userDetails(token);
-
     try {
       const response = await axios.get(
         `${BACKEND_API}/userDetails?email=${userInfo.email}`,
@@ -116,9 +129,7 @@ export default function ShoppingCart({
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-
       const favoriteProductIds = response.data?.favorites;
-
       if (favoriteProductIds && favoriteProductIds.length > 0) {
         const productRequests = favoriteProductIds.map(async (favorite) => {
           try {
@@ -128,7 +139,6 @@ export default function ShoppingCart({
                 headers: { Authorization: `Bearer ${token}` },
               }
             );
-
             return productResponse.data;
           } catch (err) {
             console.error(
@@ -163,6 +173,7 @@ export default function ShoppingCart({
       console.error("Error removing favorite", err);
     }
   };
+
   const proceedToCheckout = () => {
     const productsData = products.map((product) => ({
       Name: product.productName,
@@ -177,11 +188,96 @@ export default function ShoppingCart({
     router.push(`/checkout?fromCart=true&${queryParams}`);
   };
 
+  const loadUserDetails = async () => {
+    try {
+      const response = await userDetails(token);
+      setFormData({
+        name: response.name,
+        email: response.email,
+        password: response.password,
+        confirmPassword: response.password,
+      });
+    } catch (err) {
+      console.error("Error loading user details ", err);
+    }
+  };
+
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const validateForm = () => {
+    let formValid = true;
+    const errors = { name: "", email: "", password: "", confirmPassword: "" };
+
+    const regex = /\d/;
+    if (regex.test(formData.name)) {
+      errors.name = "Name cannot contains numbers";
+      formValid = false;
+    }
+    if (formData.password.length < 8) {
+      errors.password = "Password must contains at least 8 characters";
+      formValid = false;
+    }
+    if (formData.password !== formData.confirmPassword) {
+      errors.confirmPassword = "Passwords do not match";
+      formValid = false;
+    }
+    setErrors(errors);
+    return formValid;
+  };
+  const updateProfile = async () => {
+    const userInfo = await userDetails(token);
+    try {
+      const response = await axios.put(
+        `${BACKEND_API}/updateUser/${userInfo.email}`,
+        formData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (response) {
+        toast.success("Profile Updated Successfully", {
+          position: "bottom-center",
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: false,
+          style: {
+            backgroundColor: "#4caf50",
+            color: "#fff",
+          },
+        });
+      }
+    } catch (err) {
+      console.error("Error updating user ", err);
+      toast.error("Error updating profile ", {
+        position: "bottom-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+      });
+    }
+  };
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validateForm()) {
+      updateProfile();
+    }
+  };
   useEffect(() => {
     if (modalType === "cart") {
       loadUserCart();
     } else if (modalType === "favorites") {
       loadUserFavorites();
+    } else {
+      loadUserDetails();
     }
   }, [isVisible, modalType]);
 
@@ -296,8 +392,89 @@ export default function ShoppingCart({
               </div>
             )}
           </>
+        ) : modalType === "profile" ? (
+          <>
+            <div className={classes.cart}>
+              <h1>Profile</h1>
+              <button onClick={closeCart} className={classes.close}>
+                X
+              </button>
+            </div>
+            <form onSubmit={handleFormSubmit}>
+              <div className={classes.inputBox}>
+                <label htmlFor="name">Name</label>
+                <input
+                  className={classes.input}
+                  name="name"
+                  value={formData.name}
+                  onChange={handleFormChange}
+                  type="text"
+                  required
+                />
+              </div>
+              {errors.name && (
+                <p className={classes.errorText}>{errors.name}</p>
+              )}
+
+              <div className={classes.inputBox}>
+                <label htmlFor="email">Email</label>
+                <input
+                  className={classes.input}
+                  name="email"
+                  value={formData.email}
+                  onChange={handleFormChange}
+                  type="email"
+                  required
+                />
+              </div>
+              <div className={classes.inputBox}>
+                <label htmlFor="password">Password</label>
+                <input
+                  className={classes.input}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleFormChange}
+                  type="password"
+                  required
+                />
+              </div>
+              {errors.password && (
+                <p className={classes.errorText}>{errors.password}</p>
+              )}
+
+              <div className={classes.inputBox}>
+                <label htmlFor="confirmPassword">Confirm Password</label>
+                <input
+                  className={classes.input}
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleFormChange}
+                  type="password"
+                  required
+                />
+              </div>
+              {errors.confirmPassword && (
+                <p className={classes.errorText}>{errors.confirmPassword}</p>
+              )}
+
+              <div>
+                <button
+                  className={classes.btn}
+                  disabled={
+                    !formData.name ||
+                    !formData.email ||
+                    !formData.password ||
+                    !formData.confirmPassword
+                  }
+                  type="submit">
+                  Update Profile
+                </button>
+              </div>
+            </form>
+          </>
         ) : null}
       </div>
+      <ToastContainer />
     </div>
   );
 }
