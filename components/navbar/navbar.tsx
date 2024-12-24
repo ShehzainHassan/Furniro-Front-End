@@ -33,7 +33,6 @@ export default function Navbar({ role }: NavbarProps) {
   const token = Cookies.get("JWT");
 
   const Logout = () => {
-    Cookies.remove("loggedIn");
     Cookies.remove("JWT");
     window.location.href = "/";
   };

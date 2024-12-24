@@ -33,8 +33,7 @@ export default function Login() {
         email: formData.email,
         password: formData.password,
       });
-     
-      Cookies.set("loggedIn", "true");
+
       Cookies.set("JWT", response.data.token, {
         expires: 1 / 24,
       });

@@ -78,7 +78,6 @@ export default function Signup({ isAdmin }: SignupProps) {
         password: formData.password,
       });
       if (!isAdmin) {
-        Cookies.set("loggedIn", "true");
         Cookies.set("JWT", response.data.token);
         redirectToHome(response.data.token);
       } else {
