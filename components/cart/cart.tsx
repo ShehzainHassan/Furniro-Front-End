@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import classes from "./cart.module.css";
 import { useRouter } from "next/navigation";
+import { userDetails } from "@/utils/authUtils";
 
 interface Cart {
   id: string;
@@ -31,7 +32,6 @@ export default function ShoppingCart({
   const [favorites, setFavorites] = useState<Product[]>([]);
   const [cartTotal, setCartTotal] = useState<number>(0);
 
-  const email = Cookies.get("loggedEmail");
   const token = Cookies.get("JWT");
   const router = useRouter();
   const calculateCurrentPrice = (originalPrice: number, discount: number) => {
@@ -42,9 +42,10 @@ export default function ShoppingCart({
   };
 
   const loadUserCart = async () => {
+    const userInfo = await userDetails(token);
     try {
       const response = await axios.get(
-        `${BACKEND_API}/getCart?email=${email}`,
+        `${BACKEND_API}/getCart?email=${userInfo.email}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -78,10 +79,15 @@ export default function ShoppingCart({
   };
 
   const deleteFromCart = async (_id: string) => {
+    const userInfo = await userDetails(token);
+
     try {
-      await axios.delete(`${BACKEND_API}/removeProduct/${email}/${_id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.delete(
+        `${BACKEND_API}/removeProduct/${userInfo.email}/${_id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       loadUserCart();
       window.location.reload();
     } catch (err) {
@@ -101,9 +107,11 @@ export default function ShoppingCart({
   };
 
   const loadUserFavorites = async () => {
+    const userInfo = await userDetails(token);
+
     try {
       const response = await axios.get(
-        `${BACKEND_API}/userDetails?email=${email}`,
+        `${BACKEND_API}/userDetails?email=${userInfo.email}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -141,10 +149,14 @@ export default function ShoppingCart({
   };
 
   const removeFavorite = async (id: string) => {
+    const userInfo = await userDetails(token);
     try {
-      await axios.delete(`${BACKEND_API}/removeFavorite/${email}/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.delete(
+        `${BACKEND_API}/removeFavorite/${userInfo.email}/${id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       loadUserFavorites();
       window.location.reload();
     } catch (err) {

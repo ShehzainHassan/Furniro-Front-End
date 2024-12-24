@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Products from "../page";
 import classes from "./page.module.css";
+import { userDetails } from "@/utils/authUtils";
 
 interface Product {
   _id: string;
@@ -28,7 +29,6 @@ export default function ProductDetails() {
   const router = useRouter();
   const pathname = usePathname();
   const token = Cookies.get("JWT");
-  const loggedEmail = Cookies.get("loggedEmail");
 
   const calculateCurrentPrice = (originalPrice: number, discount: number) => {
     if (discount > 0) {
@@ -38,11 +38,12 @@ export default function ProductDetails() {
   };
 
   const updateUserCart = async () => {
+    const userInfo = await userDetails(token);
     try {
       await axios.patch(
         `${BACKEND_API}/updateCart`,
         {
-          email: loggedEmail,
+          email: userInfo.email,
           productId: selectedProduct?._id,
           qty: quantity,
         },
@@ -81,9 +82,10 @@ export default function ProductDetails() {
     }
   };
   const addProductToFavorites = async () => {
+    const userInfo = await userDetails(token)
     try {
       const response = await axios.post(
-        `${BACKEND_API}/addFavorite/${loggedEmail}/${selectedProduct._id}`,
+        `${BACKEND_API}/addFavorite/${userInfo.email}/${selectedProduct._id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

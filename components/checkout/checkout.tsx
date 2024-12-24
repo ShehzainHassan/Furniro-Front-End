@@ -7,6 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "../../components/header/header";
 import Footer from "../footer/footer";
+import { userDetails } from "@/utils/authUtils";
 const BACKEND_API = process.env.NEXT_PUBLIC_API_URL;
 
 export default function CheckoutPage() {
@@ -18,11 +19,11 @@ export default function CheckoutPage() {
   const priceNum = price ? parseFloat(price) : 0;
   const qtyNum = qty ? parseInt(qty) : 0;
   const total = priceNum * qtyNum;
-  const email = Cookies.get("loggedEmail");
   const token = Cookies.get("JWT");
   const clearUserCart = async () => {
+    const userInfo = await userDetails(token)
     try {
-      await axios.delete(`${BACKEND_API}/clearCart/${email}`, {
+      await axios.delete(`${BACKEND_API}/clearCart/${userInfo.email}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
     } catch (err) {

@@ -78,10 +78,9 @@ export default function Signup({ isAdmin }: SignupProps) {
         password: formData.password,
       });
       if (!isAdmin) {
-        Cookies.set("loggedEmail", formData.email);
         Cookies.set("loggedIn", "true");
         Cookies.set("JWT", response.data.token);
-        redirectToHome();
+        redirectToHome(response.data.token);
       } else {
         toast.success("User Created Successfully", {
           position: "bottom-center",

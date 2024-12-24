@@ -10,6 +10,7 @@ import { CiHeart } from "react-icons/ci";
 import { IoPersonOutline } from "react-icons/io5";
 import ShoppingCart from "../cart/cart";
 import classes from "./navbar.module.css";
+import { userDetails } from "@/utils/authUtils";
 
 type NavbarProps = {
   role?: string[];
@@ -22,8 +23,6 @@ export default function Navbar({ role }: NavbarProps) {
   const [cartItems, setCartItems] = useState(0);
   const [favoriteItems, setFavoriteItems] = useState(0);
 
-  const email = Cookies.get("loggedEmail");
-
   useEffect(() => {
     getCartItemCount();
     getFavoritesItemCount();
@@ -34,7 +33,6 @@ export default function Navbar({ role }: NavbarProps) {
   const token = Cookies.get("JWT");
 
   const Logout = () => {
-    Cookies.remove("loggedEmail");
     Cookies.remove("loggedIn");
     Cookies.remove("JWT");
     window.location.href = "/";
@@ -51,9 +49,10 @@ export default function Navbar({ role }: NavbarProps) {
     setIsFavoriteVisible(false);
   };
   const getCartItemCount = async () => {
+    const userInfo = await userDetails(token);
     try {
       const response = await axios.get(
-        `${BACKEND_API}/getCart?email=${email}`,
+        `${BACKEND_API}/getCart?email=${userInfo.email}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -64,9 +63,10 @@ export default function Navbar({ role }: NavbarProps) {
     }
   };
   const getFavoritesItemCount = async () => {
+    const userInfo = await userDetails(token);
     try {
       const response = await axios.get(
-        `${BACKEND_API}/userDetails?email=${email}`,
+        `${BACKEND_API}/userDetails?email=${userInfo.email}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -76,9 +76,6 @@ export default function Navbar({ role }: NavbarProps) {
       console.error("Error loading user details ", err);
     }
   };
-  if (!email) {
-    return null;
-  }
   return (
     <>
       <div
