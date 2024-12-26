@@ -101,6 +101,7 @@
   display: flex;
   flex-direction: column;
   gap: 5px;
+  margin-bottom: 10px;
 }
 .input {
   border-radius: 10px;
@@ -114,10 +115,17 @@
   cursor: pointer;
   font-size: 1.1rem;
 }
+.productImage {
+  cursor: pointer;
+}
 .errorText {
   color: red;
   font-weight: bold;
   font-size: 0.8rem;
+}
+.userInfo {
+  display: flex;
+  flex-direction: column;
 }
 @media (max-width: 768px) {
   .container {

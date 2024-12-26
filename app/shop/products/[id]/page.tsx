@@ -1,5 +1,6 @@
 "use client";
 import Footer from "@/components/footer/footer";
+import { userDetails } from "@/utils/authUtils";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Image from "next/image";
@@ -9,7 +10,6 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Products from "../page";
 import classes from "./page.module.css";
-import { userDetails } from "@/utils/authUtils";
 
 interface Product {
   _id: string;
@@ -25,10 +25,12 @@ const BACKEND_API = process.env.NEXT_PUBLIC_API_URL;
 
 export default function ProductDetails() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [quantity, setQuantity] = useState(1);
   const router = useRouter();
   const pathname = usePathname();
   const token = Cookies.get("JWT");
+  const id = pathname.split("/").pop();
 
   const calculateCurrentPrice = (originalPrice: number, discount: number) => {
     if (discount > 0) {
@@ -58,12 +60,15 @@ export default function ProductDetails() {
   };
 
   const loadSelectedProduct = async () => {
-    const id = pathname.split("/").pop();
     try {
       const response = await axios.get(`${BACKEND_API}/product/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setSelectedProduct(response.data);
+      const _response = await userDetails(token);
+      if (_response?.favorites.some((p) => p._id === id)) {
+        setIsDisabled(true);
+      }
     } catch (err) {
       console.error("Error loading product details ", err);
     }
@@ -82,7 +87,7 @@ export default function ProductDetails() {
     }
   };
   const addProductToFavorites = async () => {
-    const userInfo = await userDetails(token)
+    const userInfo = await userDetails(token);
     try {
       const response = await axios.post(
         `${BACKEND_API}/addFavorite/${userInfo.email}/${selectedProduct._id}`,
@@ -240,6 +245,7 @@ export default function ProductDetails() {
 
                 <button
                   onClick={addProductToFavorites}
+                  disabled={isDisabled}
                   className={classes.btn2}>
                   Add To Favorites
                 </button>

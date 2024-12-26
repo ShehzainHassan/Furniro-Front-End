@@ -4,6 +4,7 @@ import { userDetails } from "@/utils/authUtils";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
@@ -302,12 +303,16 @@ export default function ShoppingCart({
                   <div className={classes.product} key={index}>
                     <div className={classes.cartItems}>
                       <div className={classes.productInfo}>
-                        <Image
-                          src={`/images/${product.image}`}
-                          alt="img"
-                          width={100}
-                          height={100}
-                        />
+                        <Link href={`/shop/products/${product._id}`}>
+                          <Image
+                            src={`/images/${product.image}`}
+                            alt="img"
+                            width={100}
+                            height={100}
+                            className={classes.productImage}
+                          />
+                        </Link>
+
                         <div className={classes.productDetails}>
                           <p>{product.productName}</p>
                           <div className={classes.productQtyPrice}>
@@ -362,12 +367,15 @@ export default function ShoppingCart({
                 <div className={classes.product} key={index}>
                   <div className={classes.cartItems}>
                     <div className={classes.favoriteProducts}>
-                      <Image
-                        src={`/images/${favorite.image}`}
-                        alt="img"
-                        width={100}
-                        height={100}
-                      />
+                      <Link href={`/shop/products/${favorite._id}`}>
+                        <Image
+                          src={`/images/${favorite.image}`}
+                          alt="img"
+                          width={100}
+                          height={100}
+                          className={classes.productImage}
+                        />
+                      </Link>
                       <div className={classes.productDetails}>
                         <p>{favorite.productName}</p>
                         <p>
@@ -401,63 +409,64 @@ export default function ShoppingCart({
               </button>
             </div>
             <form onSubmit={handleFormSubmit}>
-              <div className={classes.inputBox}>
-                <label htmlFor="name">Name</label>
-                <input
-                  className={classes.input}
-                  name="name"
-                  value={formData.name}
-                  onChange={handleFormChange}
-                  type="text"
-                  required
-                />
-              </div>
-              {errors.name && (
-                <p className={classes.errorText}>{errors.name}</p>
-              )}
-
-              <div className={classes.inputBox}>
-                <label htmlFor="email">Email</label>
-                <input
-                  className={classes.input}
-                  name="email"
-                  value={formData.email}
-                  onChange={handleFormChange}
-                  type="email"
-                  required
-                />
-              </div>
-              <div className={classes.inputBox}>
-                <label htmlFor="password">Password</label>
-                <input
-                  className={classes.input}
-                  name="password"
-                  value={formData.password}
-                  onChange={handleFormChange}
-                  type="password"
-                  required
-                />
-              </div>
-              {errors.password && (
-                <p className={classes.errorText}>{errors.password}</p>
-              )}
-
-              <div className={classes.inputBox}>
-                <label htmlFor="confirmPassword">Confirm Password</label>
-                <input
-                  className={classes.input}
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleFormChange}
-                  type="password"
-                  required
-                />
-              </div>
-              {errors.confirmPassword && (
-                <p className={classes.errorText}>{errors.confirmPassword}</p>
-              )}
-
-              <div>
+              <div className={classes.userInfo}>
+                <div>
+                  <div className={classes.inputBox}>
+                    <label htmlFor="name">Name</label>
+                    <input
+                      className={classes.input}
+                      name="name"
+                      value={formData.name}
+                      onChange={handleFormChange}
+                      type="text"
+                      required
+                    />
+                  </div>
+                  {errors.name && (
+                    <p className={classes.errorText}>{errors.name}</p>
+                  )}
+                  <div className={classes.inputBox}>
+                    <label htmlFor="email">Email</label>
+                    <input
+                      className={classes.input}
+                      name="email"
+                      value={formData.email}
+                      onChange={handleFormChange}
+                      type="email"
+                      required
+                    />
+                  </div>
+                  <div className={classes.inputBox}>
+                    <label htmlFor="password">Password</label>
+                    <input
+                      className={classes.input}
+                      name="password"
+                      value={formData.password}
+                      onChange={handleFormChange}
+                      type="password"
+                      required
+                    />
+                  </div>
+                  {errors.password && (
+                    <p className={classes.errorText}>{errors.password}</p>
+                  )}
+                  <div className={classes.inputBox}>
+                    <label htmlFor="confirmPassword">Confirm Password</label>
+                    <input
+                      className={classes.input}
+                      name="confirmPassword"
+                      value={formData.confirmPassword}
+                      onChange={handleFormChange}
+                      type="password"
+                      required
+                    />
+                  </div>
+                  {errors.confirmPassword && (
+                    <p className={classes.errorText}>
+                      {errors.confirmPassword}
+                    </p>
+                  )}
+                </div>
                 <button
                   className={classes.btn}
                   disabled={
