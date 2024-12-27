@@ -96,6 +96,9 @@
   display: flex;
   justify-content: center;
   width: 100%;
+  background-color: #b8882f;
+  cursor: pointer;
+  font-size: 1.1rem;
 }
 .inputBox {
   display: flex;
